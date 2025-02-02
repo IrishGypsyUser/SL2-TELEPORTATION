@@ -1,4 +1,4 @@
-local Teleport = function(Player)
+local Teleport = function(Argument)
     local Success, Error = pcall(function() 
         local Get_Vehicle = function()
             for Index, Value in Workspace:GetChildren() do
@@ -20,16 +20,27 @@ local Teleport = function(Player)
 
         local Car = Get_Vehicle()
 
-        for Index, Value in game:GetService("Players"):GetPlayers() do
-            if Value == game:GetService("Players").LocalPlayer then continue end
+        if typeof(Argument) == "string" or (typeof(Argument) == "Instance" and Argument:IsA("Player")) then
+            for Index, Value in game:GetService("Players"):GetPlayers() do
+                if Value == game:GetService("Players").LocalPlayer then continue end
 
-            if string.match(tostring(Value):lower(), Player:lower()) or string.find(tostring(Value):lower(), Player:lower()) then
-                Player = tostring(Value)
+                if string.match(tostring(Value):lower(), tostring(Argument):lower()) or string.find(tostring(Value):lower(), tostring(Argument):lower()) then
+                    Argument = Value.Character.HumanoidRootPart.CFrame
 
-                break
-            end   
+                    break
+                end   
+            end
         end
 
+        if typeof(Argument) == "Vector3" then
+            Argument = CFrame.new(Argument.X, Argument.Y, Argument.Z)
+        end
+
+        if typeof(Argument) == "Instance" then
+            pcall(function()
+                Argument = Argument:IsA("Model") and Argument.WorldPivot or Argument.CFrame
+            end)
+        end
 
         Car.Body:FindFirstChildOfClass("Seat"):Sit(game:GetService("Players").LocalPlayer.Character.Humanoid)
 
@@ -39,7 +50,7 @@ local Teleport = function(Player)
 
         local Old_Pos = Car.PrimaryPart.CFrame
 
-        Car:SetPrimaryPartCFrame(game:GetService("Players")[Player].Character.HumanoidRootPart.CFrame + Vector3.new(0,2,0))
+        Car:SetPrimaryPartCFrame(Argument + Vector3.new(0,2,0))
 
         task.wait(0.25)
 
