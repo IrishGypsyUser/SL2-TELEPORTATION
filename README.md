@@ -3,7 +3,7 @@ South London 2 Teleporation Library
 
 # HOW TO USE IT
 
-There is multiple ways to use it, but the best way are
+There is multiple ways to use it, but the best ways are
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/IrishGypsyUser/SL2-TELEPORTATION/refs/heads/main/Source.luau"))()(Argument)
 
